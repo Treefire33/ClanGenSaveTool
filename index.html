@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<head>
+    <title>ClanGen Save Tool (Online)</title>
+    <link rel="icon" type="image/x-icon" href="images/Icon.png">
+    <link rel="stylesheet" href="css/index.css">
+    <meta content="ClanGen Save Tool" property="og:title" />
+    <meta content="Edit your ClanGen saves with ease!" property="og:description" />
+    <meta content="https://treefire33.github.io/clangensaveeditor" property="og:url" />
+    <meta content="images/Icon.png" property="og:image" />
+    <meta content="#43B581" data-react-helmet="true" name="theme-color" />
+</head>
+<body>
+    <h1>ClanGen Save Tool - v0.1</h1>
+
+    <label for="loader">Load clancats.json File</label>
+    <input type="file" accept=".json" id="loader" onchange="loadFile(this.files[0])"/><br>
+
+    <hr>
+
+    <div class="wrapper">
+        <div class="editor_otheritem" id="select_div">
+            <label for="cats">Choose a cat:</label>
+            <select name="cats" id="cats" onchange="selectCat();">
+            </select><br>
+        </div>
+
+        <!--Names-->
+        <div class="editor_griditem" id="name_div">
+            <h2>Name:</h2>
+            <label for="name_prefix">Name Prefix:</label>
+            <input type="text" id="name_prefix" name="name_prefix"><br>
+            <label for="nameSuff">Name Suffix:</label>
+            <input type="text" id="name_suffix" name="name_suffix"><br>
+            <label for="specsuffix_hidden">Hide Special Suffix:</label>
+            <input type="checkbox" id="specsuffix_hidden" name="specsuffix_hidden" onchange="updateCatJSON('specsuffix_hidden', true);"><br>
+        </div>
+
+        <!--Gender-->
+        <div class="editor_griditem" id="gender_div">
+            <h2>Gender:</h2>
+            <label for="gender">Gender:</label>
+            <select name="gender" id="gender" onchange="updateCatJSON('gender');">
+                <option value="male">Male</option>
+                <option value="female">Female</option>
+            </select><br>
+            <label for="gender_align">Gender Alignment:</label>
+            <select name="gender_align" id="gender_align" onchange="updateCatJSON('gender_align');">
+                <option value="male">Male</option>
+                <option value="female">Female</option>
+                <option value="nonbinary">Non-binary</option>
+            </select><br>
+            <h3>Pronouns:</h3>
+            <label for="pronouns">Select pronouns:</label>
+            <select name="pronouns" id="pronouns" onchange="updatePronouns(this.value);">
+            </select><br>
+            <label for="subject">Subject:</label>
+            <input type="text" name="subject" id="subject"><br>
+            <label for="object">Object:</label>
+            <input type="text" name="object" id="object"><br>
+            <label for="poss">Possessive:</label>
+            <input type="text" name="poss" id="poss"><br>
+            <label for="inposs">Inpossessive:</label>
+            <input type="text" name="inposs" id="inposs"><br>
+            <label for="self">Self:</label>
+            <input type="text" name="self" id="self"><br>
+            <label for="conju">Conjugate:</label>
+            <input type="number" name="conju" id="conju" min=1 max=2 onchange="updateCatJSON('pronouns', false, true);"><br>
+        </div>
+
+        <!--Age-->
+        <div class="editor_griditem" id="age_div">
+            <h2>Age:</h2>
+            <label for="moons">Age (Moons):</label>
+            <input type="number" name="moons" id="moons" min=0 onchange="updateCatJSON('moons', false, true)"><br>
+            <label for="dead">Is Dead:</label>
+            <input type="checkbox" id="dead" name="dead" onchange="updateCatJSON('dead', true);"><br>
+            <label for="dead_moons">Age in Death (Moons):</label>
+            <input type="number" name="dead_moons" id="dead_moons" min=0 onchange="updateCatJSON('dead_moons', false, true)"><br>
+        </div>
+
+        <!--Personal-->
+        <div class="editor_griditem" id="personal_div">
+            <h2>Personal:</h2>
+            <label for="status">Status:</label>
+            <select name="status" id="status" onchange="updateCatJSON('status');">
+            </select><br>
+            <label for="backstory">Backstory:</label>
+            <select name="backstory" id="backstory" onchange="updateCatJSON('backstory');">
+            </select><br>
+            <label for="trait">Trait:</label>
+            <select name="trait" id="trait" onchange="updateCatJSON('trait');">
+            </select><br>
+            <label for="paralyzed">Paralyzed:</label>
+            <input type="checkbox" id="paralyzed" name="paralyzed" onchange="updateCatJSON('paralyzed', true);"><br>
+            <label for="outside">Outside:</label>
+            <input type="checkbox" id="outside" name="outside" onchange="updateCatJSON('outside', true);"><br>
+            <label for="exiled">Exiled:</label>
+            <input type="checkbox" id="exiled" name="exiled" onchange="updateCatJSON('exiled', true);"><br>
+            <label for="driven_out">Driven Out:</label>
+            <input type="checkbox" id="driven_out" name="driven_out" onchange="updateCatJSON('driven_out', true);"><br>
+            <label for="df">Dark Forest:</label>
+            <input type="checkbox" id="df" name="df" onchange="updateCatJSON('df', true);"><br>
+            <label for="experience">Experience:</label>
+            <input type="number" name="experience" id="experience" min=0 max=321 onchange="updateCatJSON('experience')"><br>
+        </div>
+
+        <!--Appearance-->
+        <div class="editor_griditem" id="sprite_div">
+            <h2>Appearance:</h2>
+            <label for="eye_colour">Eye Colour:</label>
+            <select name="eye_colour" id="eye_colour" onchange="updateCatJSON('eye_colour');">
+            </select><br>
+            <label for="eye_colour2">(Heterochromia) Eye Colour 2:</label>
+            <select name="eye_colour2" id="eye_colour2" onchange="updateCatJSON('eye_colour2');">
+            </select><br>
+            <h3>Pelts:</h3>
+            <label for="skin">Skin Colour:</label>
+            <select name="skin" id="skin" onchange="updateCatJSON('skin');">
+            </select><br>
+            <label for="tint">Tint:</label>
+            <select name="tint" id="tint" onchange="updateCatJSON('tint');">
+            </select><br>
+            <label for="pelt_name">Pelt:</label>
+            <select name="pelt_name" id="pelt_name" onchange="updateCatJSON('pelt_name');">
+            </select><br>
+            <label for="pelt_color">Pelt Color:</label>
+            <select name="pelt_color" id="pelt_color" onchange="updateCatJSON('pelt_color');">
+            </select><br>
+            <label for="pelt_length">Pelt Length:</label>
+            <select name="pelt_length" id="pelt_length" onchange="updateCatJSON('pelt_length');">
+                <option value="short">Short</option>
+                <option value="medium">Medium</option>
+                <option value="long">Long</option>
+            </select><br>
+            <label for="white_patches">White Patches:</label>
+            <select name="white_patches" id="white_patches" onchange="updateCatJSON('white_patches');">
+            </select><br>
+            <label for="white_patches_tint">White Patches Tint:</label>
+            <select name="white_patches_tint" id="white_patches_tint" onchange="updateCatJSON('white_patches_tint');">
+            </select><br>
+            <label for="vitiligo">Vitiligo:</label>
+            <select name="vitiligo" id="vitiligo" onchange="updateCatJSON('vitiligo');">
+            </select><br>
+            <label for="points">Point Markings:</label>
+            <select name="points" id="points" onchange="updateCatJSON('points');">
+            </select><br>
+            <h3>Tortie Stuff (Only shows if Pelt is Tortie or Calico):</h3>
+            <label for="pattern">Pattern:</label>
+            <select name="pattern" id="pattern" onchange="updateCatJSON('pattern');">
+            </select><br>
+            <label for="tortie_base">Tortie Base:</label>
+            <select name="tortie_base" id="tortie_base" onchange="updateCatJSON('tortie_base');">
+            </select><br>
+            <label for="tortie_color">Tortie Colour:</label>
+            <select name="tortie_color" id="tortie_color" onchange="updateCatJSON('tortie_color');">
+            </select><br>
+            <label for="tortie_pattern">Tortie Pattern:</label>
+            <select name="tortie_pattern" id="tortie_pattern" onchange="updateCatJSON('tortie_pattern');">
+            </select><br>
+            <a href="https://docs.google.com/document/d/1a5JXS06GM9ecf9LErdwQ8tMtX1s0N5ZAGfYyNInqpqQ/edit#heading=h.lvdjkb2gg9oa">Tortie Guide</a><br>
+        </div>
+        <div class="editor_griditem" id="sprite2_div">
+            <h2>Appearance (Continued):</h2>
+            <h3>Poses:</h3>
+            <label for="pose_kitten">Pose (Kitten):</label>
+            <input type="range" name="pose_kitten" id="pose_kitten" min=0 max=2 onchange="updateCatJSON('pose_kitten', false, true)"><br>
+            <label for="pose_adolescent">Pose (Adolescent):</label>
+            <input type="range" name="pose_adolescent" id="pose_adolescent" min=3 max=5 onchange="updateCatJSON('pose_adolescent', false, true)"><br>
+            <label for="pose_adult">Pose (Adult):</label>
+            <input type="range" name="pose_adult" id="pose_adult" min=6 max=11 onchange="updateCatJSON('pose_adult', false, true)"><br>
+            <label for="pose_senior">Pose (Senior):</label>
+            <input type="range" name="pose_senior" id="pose_senior" min=12 max=14 onchange="updateCatJSON('pose_senior', false, true)"><br>
+            <label for="pose_para_adult">Pose (Paralyzed):</label>
+            <input type="range" name="pose_para_adult" id="pose_para_adult" min=15 max=17 onchange="updateCatJSON('pose_para_adult', false, true)"><br>
+            <h3>Other:</h3>
+            <label for="accessory">Accessory:</label>
+            <select name="accessory" id="accessory" onchange="updateCatJSON('accessory');">
+            </select><br>
+            <label for="opacity">Opcaity:</label>
+            <input type="range" name="opacity" id="opacity" min=0 max=100 onchange="updateCatJSON('opacity', false, true)"><br>
+            <label for="reverse">Flip Sprite:</label>
+            <input type="checkbox" id="reverse" name="reverse" onchange="updateCatJSON('reverse', true);"><br>
+        </div>
+    </div>
+
+    <hr>
+    <button id="saver" onclick="exportFile();">Export clancats.json File</button>
+
+    <script src="js/FileSaver.js"></script>
+    <script src="js/constants.js"></script>
+    <script src="js/clancats.js"></script>
+</body>
