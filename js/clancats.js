@@ -10,7 +10,15 @@ function print(msg) {console.log(msg);};
 
 let currentCats = {}; //Dictionary of Cats, {"ID": {Cat Object}}
 let currentCat = null;
-let currentCatPronouns = {};
+let currentCatPronouns = [];
+const pronounsDefault = {
+    subject: "they",
+    object: "them",
+    poss: "their",
+    inposs: "theirs",
+    self: "theirself",
+    conju: 1
+};
 
 const selector = document.getElementById("cats");
 const namePref = document.getElementById("name_prefix");
@@ -27,6 +35,7 @@ const pronounFields = [
     document.getElementById("self")
 ].forEach((value, index) => {value.addEventListener('input', () => updateCatJSON('pronouns'));});
 initDropdowns();
+initSkillSelects();
 
 async function loadFile(file) 
 {
@@ -78,12 +87,18 @@ function initDropdowns()
         newOption.innerText = value;
         traitsGroup2.appendChild(newOption);
     });
-    accessories.forEach((value, index) => {
-        let newOption = document.createElement("option");
-        newOption.value = value;
-        newOption.innerText = value == null ? "none (null)" : value;
-        document.getElementById('accessory').appendChild(newOption);
-    });
+    for(const [key, value] of Object.entries(accessories))
+    {
+        let accGroup = document.createElement("optgroup");
+        accGroup.label = key;
+        value.forEach((v, index) => {
+            let newOption = document.createElement("option");
+            newOption.value = v;
+            newOption.innerText = v == null ? "none (null)" : v;
+            accGroup.appendChild(newOption);
+        });
+        document.getElementById('accessory').append(accGroup);
+    }
     eyeColours.forEach((value, index) => {
         if(value == null) {return;}
         let newOption = document.createElement("option");
@@ -191,6 +206,26 @@ function initCatEditor()
     updateListArrays();
 }
 
+function refresh()
+{
+    selector.replaceChildren();
+    //Selector
+    for(const [key, value] of Object.entries(currentCats)) 
+    {
+        let newOption = document.createElement("option");
+        newOption.value = value.ID;
+        newOption.innerText = key + " - " + nameFromStatus(value);
+        selector.appendChild(newOption);
+    }
+
+    selector.value = currentCat.ID;
+
+    updateFamilialSelects();
+    changeCurrentCat();
+    updateScarSelect();
+    updateListArrays();
+}
+
 function selectCat()
 {
     if(currentCat != null)
@@ -198,6 +233,7 @@ function selectCat()
         updateCatJSON("all");
     }
     currentCat = currentCats[selector.value];
+    updateSkillDictEditor();
     updateFamilialSelects();
     changeCurrentCat();
     updateScarSelect();
@@ -217,10 +253,56 @@ function updateFamilialSelects()
             if(v.ID == currentCat.ID) { continue; }
             let newOption = document.createElement("option");
             newOption.value = v.ID;
-            newOption.innerText = k + " - " + v.name_prefix + v.name_suffix;
+            newOption.innerText = k + " - " + nameFromStatus(v);
             document.getElementById(value).appendChild(newOption);
         }
     });
+}
+
+function initSkillSelects()
+{
+    ["primary", "secondary", "hidden"].forEach((value) => {
+        document.getElementById(value+"Skill").replaceChildren();
+        skills.forEach((v) => {
+            let newOption = document.createElement("option");
+            newOption.value = v;
+            newOption.innerText = v;
+            document.getElementById(value+"Skill").appendChild(newOption);
+        });
+    });
+}
+
+function updateSkillDictEditor()
+{
+    ["primary", "secondary", "hidden"].forEach((value) => {
+        if(currentCat.skill_dict[value] == null) 
+        { 
+            document.getElementById(value).style = "display:none;"; 
+            document.getElementById(value+"Enable").checked = false;
+            return; 
+        }
+        else if(value != "primary") 
+        {  
+            document.getElementById(value).style = ""; 
+            document.getElementById(value+"Enable").checked = true;
+        }
+        document.getElementById(value+"Skill").value = currentCat.skill_dict[value].split(',')[0];
+        document.getElementById(value+"Exp").value = parseInt(currentCat.skill_dict[value].split(',')[1]);
+    });  
+    updateCatJSON("skill_dict");
+}
+
+function toggleSkillDictEntry(key, checked)
+{
+    if(checked)
+    {
+        currentCat.skill_dict[key] = "HUNTER,1,False";
+    }
+    else
+    {
+        currentCat.skill_dict[key] = null;
+    }
+    updateSkillDictEditor();
 }
 
 function updateScarSelect()
@@ -289,6 +371,26 @@ function removeCatToArray(id, value)
     updateListArrays();
 }
 
+function addPronouns()
+{
+    if(currentCat != null)
+    {
+        currentCat["pronouns"].push(structuredClone(pronounsDefault));
+        document.getElementById("pronouns").replaceChildren();
+        currentCatPronouns = [];
+        for(const [k, v] of Object.entries(currentCat["pronouns"])) 
+        {
+            let newOption = document.createElement("option");
+            newOption.value = k;
+            newOption.innerText = v.subject + "/" + v.object;
+            currentCatPronouns.push(v);
+            document.getElementById("pronouns").appendChild(newOption);
+        }
+        updatePronouns(currentCatPronouns.length-1);
+        document.getElementById("pronouns").value = currentCatPronouns.length-1;
+    }
+}
+
 function changeCurrentCat()
 {
     if(currentCat == undefined || currentCat == null) { return; }
@@ -297,16 +399,20 @@ function changeCurrentCat()
         if(key == "pronouns")
         {
             document.getElementById(key).replaceChildren();
-            currentCatPronouns = {};
+            currentCatPronouns = [];
             for(const [k, v] of Object.entries(value)) 
             {
                 let newOption = document.createElement("option");
                 newOption.value = k;
-                newOption.innerText = v.subject;
-                currentCatPronouns[k] = v;
+                newOption.innerText = v.subject + "/" + v.object;
+                currentCatPronouns.push(v);
                 document.getElementById(key).appendChild(newOption);
             }
             updatePronouns(0);
+        }
+        else if(key == "skill_dict")
+        {
+            updateSkillDictEditor();
         }
         else if(document.getElementById(key))
         {
@@ -333,6 +439,8 @@ function updateCatJSON(attributeToChange, isCheckbox, toInt)
     {
         if(attributeToChange == "all")
         {
+            updateCatJSON("pronouns");
+            updateCatJSON("skill_dict");
             currentCats[currentCat.ID] = currentCat;
             return;
         }
@@ -342,6 +450,17 @@ function updateCatJSON(attributeToChange, isCheckbox, toInt)
             {
                 currentCat[attributeToChange][parseInt(pronounSelector.value)][k] = document.getElementById(k).value;
             }
+            return;
+        }
+        if(attributeToChange == "skill_dict")
+        {
+            ["primary", "secondary", "hidden"].forEach((value) => {
+                if(currentCat.skill_dict[value] != null)
+                {
+                    let isKitOrApp = (currentCat.status == "kitten" || currentCat.status == "newborn" || currentCat.status.includes("apprentice")) ? "True" : "False";
+                    currentCat.skill_dict[value] = document.getElementById(value+"Skill").value+","+document.getElementById(value+"Exp").value+","+isKitOrApp;
+                }
+            });
             return;
         }
         if(attributeToChange == "adoptive_parents") { return; }
@@ -358,6 +477,10 @@ function updateCatJSON(attributeToChange, isCheckbox, toInt)
 function nameFromStatus(cat)
 {
 	let listName = "";
+    if(cat.specsuffix_hidden)
+    {
+        return cat.name_prefix;
+    }
 	switch(cat.status)
 	{
 		case "newborn":
@@ -383,6 +506,7 @@ function nameFromStatus(cat)
 		case "kittypet":
 		case "loner":
 		case "rogue":
+        case "exiled":
 			listName = cat.name_prefix;
 			break;
 		default:

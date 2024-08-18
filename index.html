@@ -10,11 +10,14 @@
     <meta content="#655934" data-react-helmet="true" name="theme-color" />
 </head>
 <body>
-    <h1>ClanGen Save Tool - v0.1</h1>
+    <h1>ClanGen Save Tool - v0.2</h1>
+    <p><i>This tool contains items from the development version and may break release version saves!</i></p>
+    <p><i>Updated to Commit: <a href="https://github.com/ClanGenOfficial/clangen/commit/cacc01ceef687e3563325215deb10d16daa95061">cacc01ceef687e3563325215deb10d16daa95061</a></i></p>
 
     <label for="loader">Load clancats.json File</label>
     <input type="file" accept=".json" id="loader" onchange="loadFile(this.files[0])"/>
     <button id="saver" onclick="exportFile();">Export clancats.json File</button>
+    <button id="refresh" onclick="refresh();">Refresh Editor</button>
     <br><hr>
 
     <div class="wrapper2">
@@ -55,11 +58,14 @@
                 <option value="male">Male</option>
                 <option value="female">Female</option>
                 <option value="nonbinary">Non-binary</option>
+                <option value="trans male">Trans-Male</option>
+                <option value="trans female">Trans-Female</option>
             </select><br>
             <h3>Pronouns:</h3>
             <label for="pronouns">Select pronouns:</label>
             <select name="pronouns" id="pronouns" onchange="updatePronouns(this.value);">
-            </select><br>
+            </select>
+            <button id="addPronouns" onclick="addPronouns();">Add Pronouns</button><br>
             <label for="subject">Subject:</label>
             <input type="text" name="subject" id="subject"><br>
             <label for="object">Object:</label>
@@ -173,7 +179,7 @@
             <label for="scarSelect">Select cat:</label>
             <select name="scarSelect" id="scarSelect">
             </select><br>
-            <button name="addScar" id="addScar" attribute="scars" attribute2="scarSelect" onclick="addCatToArray(this.getAttribute('attribute'), this.getAttribute('attribute2'));">Add as Previous Mate</button>
+            <button name="addScar" id="addScar" attribute="scars" attribute2="scarSelect" onclick="addCatToArray(this.getAttribute('attribute'), this.getAttribute('attribute2'));">Add Scar</button>
             <h3>Poses:</h3>
             <label for="sprite_kitten">Pose (Kitten):</label>
             <input type="range" name="sprite_kitten" id="sprite_kitten" min=0 max=2 onchange="updateCatJSON('sprite_kitten', false, true)"><br>
@@ -261,7 +267,30 @@
         <!--Skill Dict-->
         <div class="editor_griditem" id="skill_div">
             <h2>Skill Dict:</h2>
-            <p>W.I.P</p>
+            <div id="primary">
+                <label for="primarySkill">Primary Skill:<br></label>
+                <select name="primarySkill" id="primarySkill">
+                </select>
+                <input type="number" name="primaryExp" id="primaryExp" min=0 max=29><br>
+            </div>
+            <hr>
+            <div id="secondary">
+                <label for="secondarySkill">Secondary Skill:<br></label>
+                <select name="secondarySkill" id="secondarySkill">
+                </select>
+                <input type="number" name="secondaryExp" id="secondaryExp" min=0 max=29><br>
+            </div>
+            <label for="secondaryEnable">Has Secondary Skill:</label>
+            <input type="checkbox" id="secondaryEnable" name="secondaryEnable" onchange="toggleSkillDictEntry('secondary', this.checked);"><br>
+            <hr>
+            <div id="hidden">
+                <label for="hiddenSkill">Hidden Skill:<br></label>
+                <select name="hiddenSkill" id="hiddenSkill">
+                </select>
+                <input type="number" name="hiddenExp" id="hiddenExp" min=0 max=29><br>
+            </div>
+            <label for="hiddenEnable">Has Hidden Skill:</label>
+            <input type="checkbox" id="hiddenEnable" name="hiddenEnable" onchange="toggleSkillDictEntry('hidden', this.checked);"><br>
         </div>
 
         <!--Misc-->
