@@ -10,7 +10,10 @@ const statuses = [
 	"kitten",
 	"mediator",
 	"mediator apprentice",
-	"newborn"
+	"newborn",
+	"kittypet",
+	"loner",
+	"rogue"
 ];
 const backstories = [
     "clan_founder", "clanborn",
@@ -49,6 +52,7 @@ const kitTraits = [
 	"polite", "bossy"
 ];
 const accessories = [
+	null,
     "CRIMSON", "BLUE", "YELLOW", "CYAN", "RED", "LIME", "GREEN",
 	"RAINBOW", "BLACK", "SPIKES", "WHITE", "PINK", "PURPLE", "MULTI", "INDIGO",
 
@@ -174,4 +178,17 @@ const tints = [
 const whitePatchesTints = [
     "none","cream","darkcream",
 	"gray","offwhite","pink"
+];
+const scars1 = [
+	"ONE", "TWO", "THREE", "TAILSCAR", "SNOUT", "CHEEK", "SIDE", "THROAT", "TAILBASE", "BELLY",
+    "LEGBITE", "NECKBITE", "FACE", "MANLEG", "BRIGHTHEART", "MANTAIL", "BRIDGE", "RIGHTBLIND", "LEFTBLIND",
+    "BOTHBLIND", "BEAKCHEEK", "BEAKLOWER", "CATBITE", "RATBITE", "QUILLCHUNK", "QUILLSCRATCH", "HINDLEG",
+    "BACK", "QUILLSIDE", "SCRATCHSIDE", "BEAKSIDE", "CATBITETWO", "FOUR"
+];
+const scars2 = [
+	"LEFTEAR", "RIGHTEAR", "NOTAIL", "HALFTAIL", "NOPAW", "NOLEFTEAR", "NORIGHTEAR", "NOEAR"
+];
+const scars3 = [
+	"SNAKE", "TOETRAP", "BURNPAWS", "BURNTAIL", "BURNBELLY", "BURNRUMP", "FROSTFACE", "FROSTTAIL",
+    "FROSTMITT", "FROSTSOCK", "TOE", "SNAKETWO"
 ];

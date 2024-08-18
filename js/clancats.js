@@ -1,28 +1,9 @@
 /*
-"parent1": null,
-"parent2": null,
-"adoptive_parents": [],
-"mentor": null,
-"former_mentor": [],
-"patrol_with_mentor": 0,
-"mate": [],
-"previous_mates": [],
-"no_kits": false,
-"no_retire": false,
-"no_mates": false,
 "skill_dict": {
     "primary": "SENSE,14,False",
     "secondary": "SWIMMER,19,False",
     "hidden": null
 },
-"scars": [],
-"current_apprentice": [
-    "134"
-],
-"former_apprentices": [],
-"faded_offspring": [],
-"prevent_fading": false,
-"favourite": false
 */
 
 function print(msg) {console.log(msg);};
@@ -80,16 +61,27 @@ function initDropdowns()
         newOption.innerText = value;
         document.getElementById('backstory').appendChild(newOption);
     });
+    let traitsGroup1 = document.createElement("optgroup");
+    traitsGroup1.label = "Standard Traits";
+    let traitsGroup2 = document.createElement("optgroup");
+    traitsGroup2.label = "Kit Traits";
+    document.getElementById('trait').append(traitsGroup1, traitsGroup2);
     traits.forEach((value, index) => {
         let newOption = document.createElement("option");
         newOption.value = value;
         newOption.innerText = value;
-        document.getElementById('trait').appendChild(newOption);
+        traitsGroup1.appendChild(newOption);
+    });
+    kitTraits.forEach((value, index) => {
+        let newOption = document.createElement("option");
+        newOption.value = value;
+        newOption.innerText = value;
+        traitsGroup2.appendChild(newOption);
     });
     accessories.forEach((value, index) => {
         let newOption = document.createElement("option");
         newOption.value = value;
-        newOption.innerText = value;
+        newOption.innerText = value == null ? "none (null)" : value;
         document.getElementById('accessory').appendChild(newOption);
     });
     eyeColours.forEach((value, index) => {
@@ -187,13 +179,16 @@ function initCatEditor()
     {
         let newOption = document.createElement("option");
         newOption.value = value.ID;
-        newOption.innerText = key + " - " + value.name_prefix + value.name_suffix;
+        newOption.innerText = key + " - " + nameFromStatus(value);
         selector.appendChild(newOption);
     }
 
     currentCat = currentCats[Object.keys(currentCats)[0]];
 
+    updateFamilialSelects();
     changeCurrentCat();
+    updateScarSelect();
+    updateListArrays();
 }
 
 function selectCat()
@@ -203,7 +198,95 @@ function selectCat()
         updateCatJSON("all");
     }
     currentCat = currentCats[selector.value];
+    updateFamilialSelects();
     changeCurrentCat();
+    updateScarSelect();
+    updateListArrays();
+}
+
+function updateFamilialSelects()
+{
+    ["parent1", "parent2", "mentor", "adoptiveSelect", "formerMentorSelect", "currentAppSelect", "formerAppSelect", "mateSelect", "prevMateSelect"].forEach((value) => {
+        document.getElementById(value).replaceChildren();
+        let newOption = document.createElement("option");
+        newOption.value = null;
+        newOption.innerText = "none (null)";
+        document.getElementById(value).appendChild(newOption);
+        for(const [k, v] of Object.entries(currentCats))
+        {
+            if(v.ID == currentCat.ID) { continue; }
+            let newOption = document.createElement("option");
+            newOption.value = v.ID;
+            newOption.innerText = k + " - " + v.name_prefix + v.name_suffix;
+            document.getElementById(value).appendChild(newOption);
+        }
+    });
+}
+
+function updateScarSelect()
+{
+    let scarSelect = document.getElementById("scarSelect");
+    scarSelect.replaceChildren();
+    let scarsGroup1 = document.createElement("optgroup");
+    scarsGroup1.label = "Inflicted by Other Cats or Animals";
+    let scarsGroup2 = document.createElement("optgroup");
+    scarsGroup2.label = "Lost Limbs";
+    let scarsGroup3 = document.createElement("optgroup");
+    scarsGroup3.label = "Scars Inflicted Through Special Events";
+    scarSelect.append(scarsGroup1, scarsGroup2, scarsGroup3);
+    for(const [k, v] of Object.entries(scars1))
+    {
+        let newOption = document.createElement("option");
+        newOption.value = v;
+        newOption.innerText = v;
+        scarsGroup1.appendChild(newOption);
+    }
+    for(const [k, v] of Object.entries(scars2))
+    {
+        let newOption = document.createElement("option");
+        newOption.value = v;
+        newOption.innerText = v;
+        scarsGroup2.appendChild(newOption);
+    }
+    for(const [k, v] of Object.entries(scars3))
+    {
+        let newOption = document.createElement("option");
+        newOption.value = v;
+        newOption.innerText = v;
+        scarsGroup3.appendChild(newOption);
+    }
+}
+
+function updateListArrays()
+{
+    document.querySelectorAll(".list_array").forEach((element) => {
+        element.replaceChildren();
+        if(currentCat[element.id])
+        {
+            currentCat[element.id].forEach((v) => {
+                if(v == null) { return; }
+                let newText = document.createElement("p");
+                newText.innerText = v;
+                newText.style = "display: inline";
+                let newButton = document.createElement("button");
+                newButton.innerText = "Remove";
+                newButton.onclick = () => {removeCatToArray(element.id, v);};
+                element.append(newText, newButton, document.createElement("br"));
+            });
+        }
+    });
+}
+
+function addCatToArray(id, id2)
+{
+    currentCat[id].push(document.getElementById(id2).value);
+    updateListArrays();
+}
+
+function removeCatToArray(id, value)
+{
+    removeItem(currentCat[id], value);
+    updateListArrays();
 }
 
 function changeCurrentCat()
@@ -261,6 +344,7 @@ function updateCatJSON(attributeToChange, isCheckbox, toInt)
             }
             return;
         }
+        if(attributeToChange == "adoptive_parents") { return; }
         if(isCheckbox) currentCat[attributeToChange] = document.getElementById(attributeToChange).checked;
         else
         {
@@ -269,6 +353,43 @@ function updateCatJSON(attributeToChange, isCheckbox, toInt)
         }
         currentCats[currentCat.ID] = currentCat;
     }
+}
+
+function nameFromStatus(cat)
+{
+	let listName = "";
+	switch(cat.status)
+	{
+		case "newborn":
+		case "kitten":
+			listName = cat.name_prefix + "kit";
+			break;
+		case "medicine cat apprentice":
+		case "mediator apprentice":
+		case "apprentice":
+			listName = cat.name_prefix + "paw";
+			break;
+		case "elder":
+		case "deputy":
+		case "medicine cat":
+		case "mediator":
+		case "warrior":
+		case "former Clancat":
+			listName = cat.name_prefix + cat.name_suffix;
+			break;
+		case "leader":
+			listName = cat.name_prefix + "star";
+			break;
+		case "kittypet":
+		case "loner":
+		case "rogue":
+			listName = cat.name_prefix;
+			break;
+		default:
+			listName = "Invalid Status!";
+			break;
+	}
+	return listName;
 }
 
 function exportFile()
@@ -283,4 +404,14 @@ function exportFile()
         type: 'application/json'
     }); 
     saveAs(savedFile,file);
+}
+
+function removeItem(arr, value)
+{ 
+    const index = arr.indexOf(value);
+    if(index > -1) 
+    {
+      arr.splice(index, 1);
+    }
+    return arr;
 }

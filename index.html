@@ -13,9 +13,9 @@
     <h1>ClanGen Save Tool - v0.1</h1>
 
     <label for="loader">Load clancats.json File</label>
-    <input type="file" accept=".json" id="loader" onchange="loadFile(this.files[0])"/><br>
-
-    <hr>
+    <input type="file" accept=".json" id="loader" onchange="loadFile(this.files[0])"/>
+    <button id="saver" onclick="exportFile();">Export clancats.json File</button>
+    <br><hr>
 
     <div class="wrapper">
         <div class="editor_otheritem" id="select_div">
@@ -161,17 +161,23 @@
         </div>
         <div class="editor_griditem" id="sprite2_div">
             <h2>Appearance (Continued):</h2>
+            <p>Scars:</p>
+            <div id="scars" class="list_array"></div>
+            <label for="scarSelect">Select cat:</label>
+            <select name="scarSelect" id="scarSelect">
+            </select><br>
+            <button name="addScar" id="addScar" attribute="scars" attribute2="scarSelect" onclick="addCatToArray(this.getAttribute('attribute'), this.getAttribute('attribute2'));">Add as Previous Mate</button>
             <h3>Poses:</h3>
-            <label for="pose_kitten">Pose (Kitten):</label>
-            <input type="range" name="pose_kitten" id="pose_kitten" min=0 max=2 onchange="updateCatJSON('pose_kitten', false, true)"><br>
-            <label for="pose_adolescent">Pose (Adolescent):</label>
-            <input type="range" name="pose_adolescent" id="pose_adolescent" min=3 max=5 onchange="updateCatJSON('pose_adolescent', false, true)"><br>
-            <label for="pose_adult">Pose (Adult):</label>
-            <input type="range" name="pose_adult" id="pose_adult" min=6 max=11 onchange="updateCatJSON('pose_adult', false, true)"><br>
-            <label for="pose_senior">Pose (Senior):</label>
-            <input type="range" name="pose_senior" id="pose_senior" min=12 max=14 onchange="updateCatJSON('pose_senior', false, true)"><br>
-            <label for="pose_para_adult">Pose (Paralyzed):</label>
-            <input type="range" name="pose_para_adult" id="pose_para_adult" min=15 max=17 onchange="updateCatJSON('pose_para_adult', false, true)"><br>
+            <label for="sprite_kitten">Pose (Kitten):</label>
+            <input type="range" name="sprite_kitten" id="sprite_kitten" min=0 max=2 onchange="updateCatJSON('sprite_kitten', false, true)"><br>
+            <label for="sprite_adolescent">Pose (Adolescent):</label>
+            <input type="range" name="sprite_adolescent" id="sprite_adolescent" min=3 max=5 onchange="updateCatJSON('sprite_adolescent', false, true)"><br>
+            <label for="sprite_adult">Pose (Adult):</label>
+            <input type="range" name="sprite_adult" id="sprite_adult" min=6 max=11 onchange="updateCatJSON('sprite_adult', false, true)"><br>
+            <label for="sprite_senior">Pose (Senior):</label>
+            <input type="range" name="sprite_senior" id="sprite_senior" min=12 max=14 onchange="updateCatJSON('sprite_senior', false, true)"><br>
+            <label for="sprite_para_adult">Pose (Paralyzed):</label>
+            <input type="range" name="sprite_para_adult" id="sprite_para_adult" min=15 max=17 onchange="updateCatJSON('sprite_para_adult', false, true)"><br>
             <h3>Other:</h3>
             <label for="accessory">Accessory:</label>
             <select name="accessory" id="accessory" onchange="updateCatJSON('accessory');">
@@ -183,8 +189,85 @@
         </div>
     </div>
 
+    <div class="wrapper">
+        <!--Family, Mentorships, Apprenticeships, Relationships-->
+        <div class="editor_griditem" id="family_div">
+            <h2>Family:</h2>
+            <label for="parent1">Parent 1:</label>
+            <select name="parent1" id="parent1" onchange="updateCatJSON('parent1');">
+            </select><br>
+            <label for="parent2">Parent 2:</label>
+            <select name="parent2" id="parent2" onchange="updateCatJSON('parent2');">
+            </select><br>
+            <p>Adoptive Parents:</p>
+            <div id="adoptive_parents" class="list_array"></div>
+            <label for="adoptiveSelect">Select cat:</label>
+            <select name="adoptiveSelect" id="adoptiveSelect">
+            </select><br>
+            <button name="addParent" id="addParent" attribute="adoptive_parents" attribute2="adoptiveSelect" onclick="addCatToArray(this.getAttribute('attribute'), this.getAttribute('attribute2'));">Add as Parent</button>
+            <h2>Mentors and Apprentices:</h2>
+            <label for="mentor">Mentor:</label>
+            <select name="mentor" id="mentor" onchange="updateCatJSON('mentor');">
+            </select><br>
+            <p>Former Mentors:</p>
+            <div id="former_mentor" class="list_array"></div>
+            <label for="formerMentorSelect">Select cat:</label>
+            <select name="formerMentorSelect" id="formerMentorSelect">
+            </select><br>
+            <button name="addFormerMentor" id="addFormerMentor" attribute="former_mentor" attribute2="formerMentorSelect" onclick="addCatToArray(this.getAttribute('attribute'), this.getAttribute('attribute2'));">Add as Former Mentor</button>
+            <hr>
+            <p>Current Apprentices:</p>
+            <div id="current_apprentice" class="list_array"></div>
+            <label for="currentAppSelect">Select cat:</label>
+            <select name="currentAppSelect" id="currentAppSelect">
+            </select><br>
+            <button name="addParent" id="addParent" attribute="current_apprentice" attribute2="currentAppSelect" onclick="addCatToArray(this.getAttribute('attribute'), this.getAttribute('attribute2'));">Add as Current Apprentice</button>
+            <hr>
+            <p>Former Apprentices:</p>
+            <div id="former_apprentices" class="list_array"></div>
+            <label for="formerAppSelect">Select cat:</label>
+            <select name="formerAppSelect" id="formerAppSelect">
+            </select><br>
+            <button name="addParent" id="addParent" attribute="former_apprentice" attribute2="formerAppSelect" onclick="addCatToArray(this.getAttribute('attribute'), this.getAttribute('attribute2'));">Add as Former Apprentice</button>
+            <h2>Relationships:</h2>
+            <p>Mates:</p>
+            <div id="mate" class="list_array"></div>
+            <label for="mateSelect">Select cat:</label>
+            <select name="mateSelect" id="mateSelect">
+            </select><br>
+            <button name="addMate" id="addMate" attribute="mate" attribute2="mateSelect" onclick="addCatToArray(this.getAttribute('attribute'), this.getAttribute('attribute2'));">Add as Mate</button>
+            <hr>
+            <p>Former Mates:</p>
+            <div id="previous_mates" class="list_array"></div>
+            <label for="prevMateSelect">Select cat:</label>
+            <select name="prevMateSelect" id="prevMateSelect">
+            </select><br>
+            <button name="addPrevMate" id="addPrevMate" attribute="previous_mates" attribute2="prevMateSelect" onclick="addCatToArray(this.getAttribute('attribute'), this.getAttribute('attribute2'));">Add as Previous Mate</button>
+        </div>
+
+        <!--Skill Dict-->
+        <div class="editor_griditem" id="skill_div">
+            <h2>Skill Dict:</h2>
+            <p><i>...where is it?</i></p>
+        </div>
+
+        <!--Misc-->
+        <div class="editor_griditem" id="family_div">
+            <h2>Misc:</h2>
+            <label for="no_kits">No Kits:</label>
+            <input type="checkbox" id="no_kits" name="no_kits" onchange="updateCatJSON(this.id, true);"><br>
+            <label for="no_retire">No Retiring:</label>
+            <input type="checkbox" id="no_retire" name="no_retire" onchange="updateCatJSON(this.id, true);"><br>
+            <label for="no_mates">No Mates:</label>
+            <input type="checkbox" id="no_mates" name="no_mates" onchange="updateCatJSON(this.id, true);"><br>
+            <label for="prevent_fading">Prevent Fading:</label>
+            <input type="checkbox" id="prevent_fading" name="prevent_fading" onchange="updateCatJSON(this.id, true);"><br>
+            <label for="favourite">Favourite:</label>
+            <input type="checkbox" id="favourite" name="favourite" onchange="updateCatJSON(this.id, true);"><br>
+        </div>
+    </div>
+
     <hr>
-    <button id="saver" onclick="exportFile();">Export clancats.json File</button>
 
     <script src="js/FileSaver.js"></script>
     <script src="js/constants.js"></script>
