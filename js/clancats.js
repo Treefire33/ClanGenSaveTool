@@ -415,3 +415,13 @@ function removeItem(arr, value)
     }
     return arr;
 }
+
+function switchPage(num) {
+    var i;
+    var x = document.getElementsByClassName("wrapper");
+    for (i = 0; i < x.length; i++) {
+      x[i].style.display = "none";
+    }
+    document.getElementById("page"+num.toString()).style.display = "block";
+}
+switchPage(1);

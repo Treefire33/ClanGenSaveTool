@@ -17,13 +17,20 @@
     <button id="saver" onclick="exportFile();">Export clancats.json File</button>
     <br><hr>
 
-    <div class="wrapper">
+    <div class="wrapper2">
         <div class="editor_otheritem" id="select_div">
             <label for="cats">Choose a cat:</label>
             <select name="cats" id="cats" onchange="selectCat();">
             </select><br>
         </div>
+    </div>
 
+    <div id="pageViewer">
+        <button onclick="switchPage(1)">Page 1</button>
+        <button onclick="switchPage(2)">Page 2</button>
+    </div>
+
+    <div class="wrapper" id="page1">
         <!--Names-->
         <div class="editor_griditem" id="name_div">
             <h2>Name:</h2>
@@ -189,7 +196,7 @@
         </div>
     </div>
 
-    <div class="wrapper">
+    <div class="wrapper" id="page2">
         <!--Family, Mentorships, Apprenticeships, Relationships-->
         <div class="editor_griditem" id="family_div">
             <h2>Family:</h2>
@@ -205,6 +212,9 @@
             <select name="adoptiveSelect" id="adoptiveSelect">
             </select><br>
             <button name="addParent" id="addParent" attribute="adoptive_parents" attribute2="adoptiveSelect" onclick="addCatToArray(this.getAttribute('attribute'), this.getAttribute('attribute2'));">Add as Parent</button>
+        </div> 
+        
+        <div class="editor_griditem" id="mentor_div">
             <h2>Mentors and Apprentices:</h2>
             <label for="mentor">Mentor:</label>
             <select name="mentor" id="mentor" onchange="updateCatJSON('mentor');">
@@ -229,6 +239,9 @@
             <select name="formerAppSelect" id="formerAppSelect">
             </select><br>
             <button name="addParent" id="addParent" attribute="former_apprentice" attribute2="formerAppSelect" onclick="addCatToArray(this.getAttribute('attribute'), this.getAttribute('attribute2'));">Add as Former Apprentice</button>
+        </div>
+
+        <div class="editor_griditem" id="relationship_div">
             <h2>Relationships:</h2>
             <p>Mates:</p>
             <div id="mate" class="list_array"></div>
@@ -266,8 +279,6 @@
             <input type="checkbox" id="favourite" name="favourite" onchange="updateCatJSON(this.id, true);"><br>
         </div>
     </div>
-
-    <hr>
 
     <script src="js/FileSaver.js"></script>
     <script src="js/constants.js"></script>

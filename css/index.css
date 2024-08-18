@@ -1,4 +1,8 @@
-.wrapper {
+body {
+    background-color: rgb(206, 194, 168);
+    /* font-family: ; */
+}
+.wrapper, .wrapper2 {
     display: inline flow-root list-item;
     width: 100%;
     /* border-width: 5px;
@@ -11,4 +15,39 @@
     border-color: black;
     border-style: solid; */
     margin: 5px;
+}
+input {
+    color: #EFE5CE;
+    background-color: #655934;
+    border: #2F2918 2px solid;
+    margin: 5px;
+}
+input:hover {
+    background-color: #1E1809;
+}
+input[type="checkbox"] {
+    /* outline: #2F2918 2px solid;
+    border-radius: 3px; */
+    accent-color: #655934;
+}
+button {
+    color: #EFE5CE;
+    background-color: #655934;
+    border: #2F2918 2px solid;
+    margin: 5px;
+}
+button:hover {
+    background-color: #1E1809;
+}
+select {
+    color: #EFE5CE;
+    background-color: #655934;
+    border: #2F2918 2px solid;
+    margin: 5px;
+}
+select:hover {
+    background-color: #1E1809;
+}
+select > option {
+    background-color: #776045;
 }
