@@ -77,18 +77,18 @@
             <label for="self">Self:</label>
             <input type="text" name="self" id="self"><br>
             <label for="conju">Conjugate:</label>
-            <input type="number" name="conju" id="conju" min=1 max=2 onchange="updateCatJSON('pronouns', false, true);"><br>
+            <input type="number" name="conju" id="conju" min=1 max=2 onchange="updateCatJSON('pronouns');"><br>
         </div>
 
         <!--Age-->
         <div class="editor_griditem" id="age_div">
             <h2>Age:</h2>
             <label for="moons">Age (Moons):</label>
-            <input type="number" name="moons" id="moons" min=0 onchange="updateCatJSON('moons', false, true)"><br>
+            <input type="number" name="moons" id="moons" min=0 onchange="updateCatJSON('moons')"><br>
             <label for="dead">Is Dead:</label>
-            <input type="checkbox" id="dead" name="dead" onchange="updateCatJSON('dead', true);"><br>
+            <input type="checkbox" id="dead" name="dead" onchange="updateCatJSON('dead');"><br>
             <label for="dead_moons">Age in Death (Moons):</label>
-            <input type="number" name="dead_moons" id="dead_moons" min=0 onchange="updateCatJSON('dead_moons', false, true)"><br>
+            <input type="number" name="dead_moons" id="dead_moons" min=0 onchange="updateCatJSON('dead_moons')"><br>
         </div>
 
         <!--Personal-->
@@ -104,17 +104,17 @@
             <select name="trait" id="trait" onchange="updateCatJSON('trait');">
             </select><br>
             <label for="paralyzed">Paralyzed:</label>
-            <input type="checkbox" id="paralyzed" name="paralyzed" onchange="updateCatJSON('paralyzed', true);"><br>
+            <input type="checkbox" id="paralyzed" name="paralyzed" onchange="updateCatJSON('paralyzed');"><br>
             <label for="outside">Outside:</label>
-            <input type="checkbox" id="outside" name="outside" onchange="updateCatJSON('outside', true);"><br>
+            <input type="checkbox" id="outside" name="outside" onchange="updateCatJSON('outside');"><br>
             <label for="exiled">Exiled:</label>
-            <input type="checkbox" id="exiled" name="exiled" onchange="updateCatJSON('exiled', true);"><br>
+            <input type="checkbox" id="exiled" name="exiled" onchange="updateCatJSON('exiled');"><br>
             <label for="driven_out">Driven Out:</label>
-            <input type="checkbox" id="driven_out" name="driven_out" onchange="updateCatJSON('driven_out', true);"><br>
+            <input type="checkbox" id="driven_out" name="driven_out" onchange="updateCatJSON('driven_out');"><br>
             <label for="df">Dark Forest:</label>
-            <input type="checkbox" id="df" name="df" onchange="updateCatJSON('df', true);"><br>
+            <input type="checkbox" id="df" name="df" onchange="updateCatJSON('df');"><br>
             <label for="experience">Experience:</label>
-            <input type="number" name="experience" id="experience" min=0 max=321 onchange="updateCatJSON('experience', false, true)"><br>
+            <input type="number" name="experience" id="experience" min=0 max=321 onchange="updateCatJSON('experience')"><br>
         </div>
 
         <!--Appearance-->
@@ -182,23 +182,23 @@
             <button name="addScar" id="addScar" attribute="scars" attribute2="scarSelect" onclick="addCatToArray(this.getAttribute('attribute'), this.getAttribute('attribute2'));">Add Scar</button>
             <h3>Poses:</h3>
             <label for="sprite_kitten">Pose (Kitten):</label>
-            <input type="range" name="sprite_kitten" id="sprite_kitten" min=0 max=2 onchange="updateCatJSON('sprite_kitten', false, true)"><br>
+            <input type="range" name="sprite_kitten" id="sprite_kitten" min=0 max=2 onchange="updateCatJSON('sprite_kitten')"><br>
             <label for="sprite_adolescent">Pose (Adolescent):</label>
-            <input type="range" name="sprite_adolescent" id="sprite_adolescent" min=3 max=5 onchange="updateCatJSON('sprite_adolescent', false, true)"><br>
+            <input type="range" name="sprite_adolescent" id="sprite_adolescent" min=3 max=5 onchange="updateCatJSON('sprite_adolescent')"><br>
             <label for="sprite_adult">Pose (Adult):</label>
-            <input type="range" name="sprite_adult" id="sprite_adult" min=6 max=11 onchange="updateCatJSON('sprite_adult', false, true)"><br>
+            <input type="range" name="sprite_adult" id="sprite_adult" min=6 max=11 onchange="updateCatJSON('sprite_adult')"><br>
             <label for="sprite_senior">Pose (Senior):</label>
-            <input type="range" name="sprite_senior" id="sprite_senior" min=12 max=14 onchange="updateCatJSON('sprite_senior', false, true)"><br>
+            <input type="range" name="sprite_senior" id="sprite_senior" min=12 max=14 onchange="updateCatJSON('sprite_senior')"><br>
             <label for="sprite_para_adult">Pose (Paralyzed):</label>
-            <input type="range" name="sprite_para_adult" id="sprite_para_adult" min=15 max=17 onchange="updateCatJSON('sprite_para_adult', false, true)"><br>
+            <input type="range" name="sprite_para_adult" id="sprite_para_adult" min=15 max=17 onchange="updateCatJSON('sprite_para_adult')"><br>
             <h3>Other:</h3>
             <label for="accessory">Accessory:</label>
             <select name="accessory" id="accessory" onchange="updateCatJSON('accessory');">
             </select><br>
             <label for="opacity">Opcaity:</label>
-            <input type="range" name="opacity" id="opacity" min=0 max=100 onchange="updateCatJSON('opacity', false, true)"><br>
+            <input type="range" name="opacity" id="opacity" min=0 max=100 onchange="updateCatJSON('opacity')"><br>
             <label for="reverse">Flip Sprite:</label>
-            <input type="checkbox" id="reverse" name="reverse" onchange="updateCatJSON('reverse', true);"><br>
+            <input type="checkbox" id="reverse" name="reverse" onchange="updateCatJSON('reverse');"><br>
         </div>
     </div>
 
@@ -244,7 +244,7 @@
             <label for="formerAppSelect">Select cat:</label>
             <select name="formerAppSelect" id="formerAppSelect">
             </select><br>
-            <button name="addParent" id="addParent" attribute="former_apprentice" attribute2="formerAppSelect" onclick="addCatToArray(this.getAttribute('attribute'), this.getAttribute('attribute2'));">Add as Former Apprentice</button>
+            <button name="addParent" id="addParent" attribute="former_apprentices" attribute2="formerAppSelect" onclick="addCatToArray(this.getAttribute('attribute'), this.getAttribute('attribute2'));">Add as Former Apprentice</button>
         </div>
 
         <div class="editor_griditem" id="relationship_div">
@@ -287,7 +287,6 @@
                 <label for="hiddenSkill">Hidden Skill:<br></label>
                 <select name="hiddenSkill" id="hiddenSkill">
                 </select>
-                <input type="number" name="hiddenExp" id="hiddenExp" min=0 max=29><br>
             </div>
             <label for="hiddenEnable">Has Hidden Skill:</label>
             <input type="checkbox" id="hiddenEnable" name="hiddenEnable" onchange="toggleSkillDictEntry('hidden', this.checked);"><br>
@@ -297,15 +296,15 @@
         <div class="editor_griditem" id="family_div">
             <h2>Misc:</h2>
             <label for="no_kits">No Kits:</label>
-            <input type="checkbox" id="no_kits" name="no_kits" onchange="updateCatJSON(this.id, true);"><br>
+            <input type="checkbox" id="no_kits" name="no_kits" onchange="updateCatJSON(this.id);"><br>
             <label for="no_retire">No Retiring:</label>
-            <input type="checkbox" id="no_retire" name="no_retire" onchange="updateCatJSON(this.id, true);"><br>
+            <input type="checkbox" id="no_retire" name="no_retire" onchange="updateCatJSON(this.id);"><br>
             <label for="no_mates">No Mates:</label>
-            <input type="checkbox" id="no_mates" name="no_mates" onchange="updateCatJSON(this.id, true);"><br>
+            <input type="checkbox" id="no_mates" name="no_mates" onchange="updateCatJSON(this.id);"><br>
             <label for="prevent_fading">Prevent Fading:</label>
-            <input type="checkbox" id="prevent_fading" name="prevent_fading" onchange="updateCatJSON(this.id, true);"><br>
+            <input type="checkbox" id="prevent_fading" name="prevent_fading" onchange="updateCatJSON(this.id);"><br>
             <label for="favourite">Favourite:</label>
-            <input type="checkbox" id="favourite" name="favourite" onchange="updateCatJSON(this.id, true);"><br>
+            <input type="checkbox" id="favourite" name="favourite" onchange="updateCatJSON(this.id);"><br>
         </div>
     </div>
 

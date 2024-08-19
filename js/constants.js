@@ -2,7 +2,7 @@ const statuses = [
     "leader",
 	"deputy",
 	"medicine cat",
-	"medicine apprentice",
+	"medicine cat apprentice",
 	"warrior",
 	"apprentice",
 	"queen",
@@ -18,7 +18,7 @@ const statuses = [
 ];
 const backstories = [
     "clan_founder", "clanborn",
-	"halfborn1", "halfborn2",
+	"halfclan1", "halfclan2",
 	"outsider_roots1", "outsider_roots2",
 	"loner1", "loner2", "loner3", "loner4",
 	"kittypet1", "kittypet2", "kittypet3", "kittypet4",
@@ -210,4 +210,7 @@ const skills = [
 	"STORY", "LORE", "CAMP", "STAR",
 	"OMEN", "DREAM", "CLAIRVOYANT", "PROPHET",
 	"GHOST", "RUNNER", "DARK"
+];
+const hiddenSkills = [
+	"ROGUE", "LONER", "KITTYPET"
 ];

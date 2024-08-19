@@ -32,6 +32,9 @@ initSkillSelects();
 async function loadFile(file) 
 {
     selector.replaceChildren();
+    currentCats = {};
+    currentCat = null;
+    currentCatPronouns = [];
     if(file.name == "clan_cats.json")
     {
         let text = await (new Response(file)).text();
@@ -253,7 +256,7 @@ function updateFamilialSelects()
 
 function initSkillSelects()
 {
-    ["primary", "secondary", "hidden"].forEach((value) => {
+    ["primary", "secondary"].forEach((value) => {
         document.getElementById(value+"Skill").replaceChildren();
         skills.forEach((v) => {
             let newOption = document.createElement("option");
@@ -261,6 +264,13 @@ function initSkillSelects()
             newOption.innerText = v;
             document.getElementById(value+"Skill").appendChild(newOption);
         });
+    });
+    document.getElementById("hiddenSkill").replaceChildren();
+    hiddenSkills.forEach((v) => {
+        let newOption = document.createElement("option");
+        newOption.value = v;
+        newOption.innerText = v;
+        document.getElementById("hiddenSkill").appendChild(newOption);
     });
 }
 
@@ -279,7 +289,10 @@ function updateSkillDictEditor()
             document.getElementById(value+"Enable").checked = true;
         }
         document.getElementById(value+"Skill").value = currentCat.skill_dict[value].split(',')[0];
-        document.getElementById(value+"Exp").value = parseInt(currentCat.skill_dict[value].split(',')[1]);
+        if(document.getElementById(value+"Exp"))
+        {
+            document.getElementById(value+"Exp").value = parseInt(currentCat.skill_dict[value].split(',')[1]);
+        }
     });  
     updateCatJSON("skill_dict");
 }
@@ -289,6 +302,10 @@ function toggleSkillDictEntry(key, checked)
     if(checked)
     {
         currentCat.skill_dict[key] = "HUNTER,1,False";
+        if(key == "hidden")
+        {
+            currentCat.skill_dict[key] = "LONER,1,False";
+        }
     }
     else
     {
@@ -425,7 +442,7 @@ function updatePronouns(key)
     }
 }
 
-function updateCatJSON(attributeToChange, isCheckbox, toInt)
+function updateCatJSON(attributeToChange)
 {
     if(currentCat != null)
     {
@@ -440,6 +457,7 @@ function updateCatJSON(attributeToChange, isCheckbox, toInt)
         {
             for(const [k, v] of Object.entries(currentCatPronouns[parseInt(pronounSelector.value)])) 
             {
+                if(k == "conju") {currentCat[attributeToChange][parseInt(pronounSelector.value)][k] = parseInt(document.getElementById(k).value); continue;}
                 currentCat[attributeToChange][parseInt(pronounSelector.value)][k] = document.getElementById(k).value;
             }
             return;
@@ -447,20 +465,37 @@ function updateCatJSON(attributeToChange, isCheckbox, toInt)
         if(attributeToChange == "skill_dict")
         {
             ["primary", "secondary", "hidden"].forEach((value) => {
-                if(currentCat.skill_dict[value] != null)
+                if(currentCat.skill_dict[value] != null && value != "hidden")
                 {
                     let isKitOrApp = (currentCat.status == "kitten" || currentCat.status == "newborn" || currentCat.status.includes("apprentice")) ? "True" : "False";
                     currentCat.skill_dict[value] = document.getElementById(value+"Skill").value+","+document.getElementById(value+"Exp").value+","+isKitOrApp;
+                }
+                else
+                {
+                    currentCat.skill_dict[value] = document.getElementById(value+"Skill").value;
                 }
             });
             return;
         }
         if(attributeToChange == "adoptive_parents") { return; }
-        if(isCheckbox) currentCat[attributeToChange] = document.getElementById(attributeToChange).checked;
-        else
+        if(document.getElementById(attributeToChange).nodeName == "SELECT")
         {
-            if(toInt) { currentCat[attributeToChange] = parseInt(document.getElementById(attributeToChange).value); return;}
             currentCat[attributeToChange] = document.getElementById(attributeToChange).value;
+            return;
+        }
+        print(document.getElementById(attributeToChange).getAttribute("type"));
+        switch(document.getElementById(attributeToChange).getAttribute("type"))
+        {
+            case "text":
+                currentCat[attributeToChange] = document.getElementById(attributeToChange).value;
+            break;
+            case "number":
+            case "range":
+                currentCat[attributeToChange] = parseInt(document.getElementById(attributeToChange).value);
+            break;
+            case "checkbox":
+                currentCat[attributeToChange] = document.getElementById(attributeToChange).checked;
+            break;
         }
         currentCats[currentCat.ID] = currentCat;
     }
