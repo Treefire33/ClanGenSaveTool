@@ -1,11 +1,3 @@
-/*
-"skill_dict": {
-    "primary": "SENSE,14,False",
-    "secondary": "SWIMMER,19,False",
-    "hidden": null
-},
-*/
-
 function print(msg) {console.log(msg);};
 
 let currentCats = {}; //Dictionary of Cats, {"ID": {Cat Object}}
